@@ -5,12 +5,12 @@ import Title from "../components/Title";
 import ProductItem from "../components/ProductItem";
 
 const Collection = () => {
-  const { products } = useContext(ShopContext);
+  const { products, search, showSearch } = useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
   const [category, setCategory] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
-  const [sortType, setSortType] = useState('relevant')
+  const [sortType, setSortType] = useState("relevant");
 
   const toggleCategory = (e) => {
     const newCategory = e.target.value;
@@ -43,6 +43,12 @@ const Collection = () => {
         subCategory.includes(item.subCategory)
       );
     }
+
+    if (showSearch && search) {
+      productsCopy = productsCopy.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
     setFilterProducts(productsCopy);
   };
 
@@ -50,27 +56,25 @@ const Collection = () => {
     const filterProductsCopy = filterProducts.slice();
 
     switch (sortType) {
-      case 'low-high':
-        setFilterProducts(filterProductsCopy.sort((a, b) => (a.price - b.price)))
+      case "low-high":
+        setFilterProducts(filterProductsCopy.sort((a, b) => a.price - b.price));
         break;
-      case 'high-low':
-        setFilterProducts(filterProductsCopy.sort((a, b) => (b.price - a.price)))
+      case "high-low":
+        setFilterProducts(filterProductsCopy.sort((a, b) => b.price - a.price));
         break;
       default:
         applyFilter();
         break;
-      
     }
-
-  }
+  };
 
   useEffect(() => {
     applyFilter();
-  }, [category, subCategory]);
+  }, [category, subCategory, search, showSearch]);
 
   useEffect(() => {
-    sortProducts()
-  },[sortType])
+    sortProducts();
+  }, [sortType]);
 
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
@@ -167,7 +171,10 @@ const Collection = () => {
         <div className="flex justify-between text-base sm:text-2xl mb-4">
           <Title text1={"ALL"} text2={"COLLECTION"} />
           {/* product short */}
-          <select onChange={(e)=> setSortType(e.target.value)} className="border-2 border-gray-200 text-sm px-2">
+          <select
+            onChange={(e) => setSortType(e.target.value)}
+            className="border-2 border-gray-200 text-sm px-2"
+          >
             <option value="relevant">Sort By</option>
             <option value="relevant">Relevant</option>
             <option value="low-high">Low to High</option>
