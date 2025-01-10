@@ -18,7 +18,6 @@ const RelatedProducts = ({ category, subCategory }) => {
       setRelated(productsCopy);
     }
   }, [products]);
-  console.log(related);
   return (
     <div className="my-24">
       <div className="text-center text-3xl py-2">
