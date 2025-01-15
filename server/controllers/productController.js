@@ -54,7 +54,7 @@ const removeProducts = async (req, res) => {
     
 }
 
-// Single product
+// Single  product
 const singleProduct = async (req, res) => {
     
 }
