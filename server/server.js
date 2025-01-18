@@ -5,6 +5,7 @@ import connectDB from "./config/mongodb.js";
 import connectCloudinary from "./config/cloudinary.js";
 import router from "./routes/index.js";
 
+
 //App configuration
 const app = express();
 const PORT = process.env.PORT || 3000
@@ -22,6 +23,7 @@ app.use("/api", router)
 app.get("/", (req, res) => {
     res.send("API is working...")
 })
+
 
 
 
