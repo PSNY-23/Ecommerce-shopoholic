@@ -4,11 +4,13 @@ import "dotenv/config"
 import connectDB from "./config/mongodb.js";
 import connectCloudinary from "./config/cloudinary.js";
 import router from "./routes/index.js";
+import dotenv from "dotenv"
 
 
 //App configuration
 const app = express();
 const PORT = process.env.PORT || 3000
+dotenv.config()
 connectDB()
 connectCloudinary()
 

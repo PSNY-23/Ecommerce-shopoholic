@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
@@ -10,16 +10,20 @@ const Product = () => {
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
+  const navigate = useNavigate()
 
   const fetchProductData = async () => {
-    let [data] = products.filter((item) => item._id === productId);
+    let [data] = await products.filter((item) => item._id === productId);
+    
+    data.sizes = JSON.parse(data.sizes[0])
     setProductData(data);
     setImage(data.image[0]);
   };
 
   useEffect(() => {
     fetchProductData();
-  }, [productId]);
+  },[productId]);
+   
 
   return (
     <>
@@ -80,7 +84,7 @@ const Product = () => {
                   ))}
                 </div>
               </div>
-              <button onClick={()=> addToCart(productData._id, size)} className="bg-black text-white px-8 py-3 text-sm active:bg-gray-700">
+              <button onClick={()=> addToCart(productData._id, size, navigate)} className="bg-black text-white px-8 py-3 text-sm active:bg-gray-700">
                 ADD TO CART
               </button>
               <hr className="mt-8 sm:w-4/5" />

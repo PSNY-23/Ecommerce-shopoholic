@@ -3,13 +3,13 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+
 const createToken = (id) => {
-  const secterKey = process.env.JWT_SCERET;
-  return jwt.sign({ id }, process.env.JWT_SCERET);
+  const secterKey = process.env.JWT_SECRET;
+  return jwt.sign({ id }, secterKey);
 };
 // User register controller
 const registerUser = async (req, res) => {
-  
   try {
     //1. check if user already exists
     const { name, email, password } = req.body;
@@ -55,6 +55,7 @@ const loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
       const token = createToken(user._id);
+      console.log(token)
       res.json({
         success: true,
         token,

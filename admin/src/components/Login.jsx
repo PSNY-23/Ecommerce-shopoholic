@@ -14,7 +14,6 @@ const Login = ({setToken}) => {
       if (response.data.success) {
         setToken(response.data.token)
         toast.success('✅Logged in')
-         console.log(response)
       }
       else {
         toast.error(response.data.message)
