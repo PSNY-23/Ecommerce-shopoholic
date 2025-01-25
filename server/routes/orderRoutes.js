@@ -22,7 +22,7 @@ orderRouter.post('/stripe',authUser, placeOrderStripe);
 orderRouter.post('/razorpay', authUser, placeOrderRazorpay);
 
 //User features
-orderRouter.post('/user-orders',authUser,userOrders)
+orderRouter.get('/user-orders',authUser,userOrders)
 
 
 

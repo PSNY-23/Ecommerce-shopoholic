@@ -4,11 +4,13 @@ import CartTotal from "../components/CartTotal";
 import Title from "../components/Title";
 import { useNavigate } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const PlaceOrder = () => {
   const navigate = useNavigate();
   const [method, setMethod] = useState("cod");
-  const { backendUrl, token, cartItems, getCartAmount, delivery_fee, products } = useContext(ShopContext);
+  const { backendUrl, token, cartItems,setCartItems, getCartAmount, delivery_fee, products } = useContext(ShopContext);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -34,11 +36,44 @@ const PlaceOrder = () => {
       for (const items in cartItems) {
         for (const item in cartItems[items]) {
           if (cartItems[items][item] > 0) {
-            const itemInfo = structuredClone(products.find)
+            const itemInfo = structuredClone(products.find((product) => product._id === items));
+            if (itemInfo) {
+              itemInfo.size = item;
+              itemInfo.quantity = cartItems[items][item];
+              orderItems.push(itemInfo);
+            }
           }
         }
       }
-    } catch (error) {}
+      let orderData = {
+        address: formData,
+        items: orderItems,
+        amount: getCartAmount() + delivery_fee,
+      };
+
+      switch (method) {
+        //API call for COD:
+        case "cod" :
+          { const response = await axios.post(backendUrl + "/api/order/cod", orderData, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          if (response.data.success) {
+            setCartItems({});
+            navigate('/orders')
+            toast.success(response.data.message)
+          } else {
+            toast.error(response.data.message)
+          }
+          break; }
+        default:
+          break;
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message)
+    }
   };
 
   return (

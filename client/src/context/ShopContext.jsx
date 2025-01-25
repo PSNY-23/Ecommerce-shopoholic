@@ -17,7 +17,7 @@ const ShopContextProvider = ({ children }) => {
 
   //cartData or cartItem = [{_id:'', size: '', quantity: ''}, {}, {}]
 
-  const addToCart = async (itemId, size, navigate) => {
+  const addToCart = async (itemId, size) => {
     let cartData = structuredClone(cartItems);
     if (!size) {
       toast.error("Select product size");
@@ -45,7 +45,7 @@ const ShopContextProvider = ({ children }) => {
           }
         );
         if (response.data.success) {
-          navigate("/cart");
+          toast.success("Items added to cart")
         }
       } catch (error) {
         console.log(error);
@@ -163,6 +163,7 @@ const ShopContextProvider = ({ children }) => {
     setShowSearch,
     addToCart,
     cartItems,
+    setCartItems,
     getCartCount,
     updateQuantity,
     getCartAmount,
